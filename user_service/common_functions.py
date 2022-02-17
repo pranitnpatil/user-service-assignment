@@ -26,7 +26,7 @@ def get_token(user):
 # DESCRIPTION: This function is to get JWT token
 def get_jwt_token(user):
     try:
-        #get jwt token pair
+        #get jwt token pair with user_id
         token = RefreshToken.for_user(user)
         if token:
             return {

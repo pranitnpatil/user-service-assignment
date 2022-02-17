@@ -32,6 +32,7 @@ Functions:
 - Saves user details in a Sqlite database.
 - Every time client calls our authentication API, we trigger a webhook sending users IP.
 - For every login, a history of ip address is kept in a model (UserLoginHistory)
+- extra API just for authentication if token required.
 - custom action to the UserLoginHistory model in the django admin interface that allows the selected record to be exported as CSV.
 - This application is also hosted on heroku
 link - https://desolate-hamlet-81823.herokuapp.com/

@@ -61,26 +61,37 @@ def create_user(request):
 # DESCRIPTION: This function is for user login
 @csrf_exempt
 def user_login(request):
+    #declaring failed return object for reusing
+    failed_return_object = {
+                    "status": messages.FAIL,
+                    "message": messages.LOGIN_FAILED,
+                }
     try:
         req = json.loads(request.body)
         if all (key in req and req[key] for key in ["username", "password"]):
             #get ip address by request
             ip_address = get_user_ip_address(request)
+            #trigger webhook to notify team
+            trigger_webhook(req["username"],ip_address)
             #check if user exist
             user_details = UserDetails.objects.filter(username = req["username"],is_deleted = False)
             if user_details.exists():
+                #saving record in loginhistory db
                 UserLoginHistory.objects.create(username = req["username"],ip_address = ip_address,
                                                 created_at = timezone.now())
-                return_object = {
+                #get token pair
+                token = get_jwt_token(user_details[0])
+                if token:
+                    return_object = {
                     "status": messages.SUCCESS,
                     "message": messages.LOGIN_SUCCESS,
+                    "token":token
                     }
+                else:
+                    return_object = failed_return_object
             else:
                 #user not present in db
-                return_object = {
-                    "status": messages.FAIL,
-                    "message": messages.LOGIN_FAILED,
-                }
+                return_object = failed_return_object
         else:
             #invalid request
             return_object = {
@@ -90,30 +101,27 @@ def user_login(request):
     except (Exception) as error:
         #exception handling
         print("error in authenticate_user", error)
-        return_object = {
-            "status": messages.FAIL,
-            "message": messages.LOGIN_FAILED,
-        }
+        return_object = failed_return_object
     return JsonResponse(return_object, safe=False)
 
 # METHOD NAME:authenticate_user 
 # DESCRIPTION: This function is for authenticating the user
 @csrf_exempt
 def authenticate_user(request):
+    #declaring failed return object for reusing
+    failed_return_object = {
+                    "status": messages.FAIL,
+                    "message": messages.LOGIN_FAILED,
+                }
     try:
         req = json.loads(request.body)
-        #declaring failed return object for reusing
-        failed_return_object = {
-            "status": messages.FAIL,
-            "message": messages.USER_AUTHENTICATION_FAIL,
-        }
         if all (key in req and req[key] for key in ["username", "password"]):
             #get ip address by request
             ip_address = get_user_ip_address(request)
             #trigger webhook to notify team
             trigger_webhook(req["username"],ip_address)
             #check if user exists
-            user_details = User.objects.filter(username = req["username"])
+            user_details = UserDetails.objects.filter(username = req["username"],is_deleted = False)
             if user_details.exists():
                 token = get_jwt_token(user_details[0])
                 if token:
