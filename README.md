@@ -1,15 +1,23 @@
 #custom django app with some custom APIs
 
 #steps for local setup and run
-1. pip install -r requirements.txt
+1. install required packages
 
-2. python manage.py make migrations (just in case)
+    pip install -r requirements.txt
+    
+2. makemigration just in case 
 
-3. python manage.py make migrate
+    python manage.py makemigrations 
+    
+3. migrate models
 
-4. python manage.py make runserver
+    python manage.py migrate
 
-Your application will be running and you can use the APIs in the urls files
+4. Run the django project
+
+    python manage.py runserver
+
+Your application will be running after and you can use the APIs in the urls files
 
 If you need to access the admin console you need to create a superuser with the following command:
 
