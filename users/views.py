@@ -12,6 +12,12 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 
+
+def index(request):
+    r = requests.get('https://httpbin.org/status/418')
+    print(r.text)
+    return HttpResponse('<pre>' + r.text + '</pre>')
+
 # METHOD NAME:create_user 
 # DESCRIPTION: This function is for user creation/registration
 @csrf_exempt
