@@ -13,5 +13,6 @@ sqlparse==0.4.2
 typing_extensions==4.1.1
 urllib3==1.26.8
 djangorestframework-simplejwt==5.0.0
+social-auth-app-django==5.0.0
 gunicorn
 django-heroku

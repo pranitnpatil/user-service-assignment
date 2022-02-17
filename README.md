@@ -34,6 +34,8 @@ Functions:
 - For every login, a history of ip address is kept in a model (UserLoginHistory)
 - extra API just for authentication if token required.
 - custom action to the UserLoginHistory model in the django admin interface that allows the selected record to be exported as CSV.
+- Signup using Google OAuth2.0 from server side with basic Frontend.
+
 - This application is also hosted on heroku
 link - https://desolate-hamlet-81823.herokuapp.com/
 admin credentials = username -admin

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
-    'users'
+    'users',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -127,9 +128,21 @@ django_heroku.settings(locals())
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+#jwt token settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
+#google-oauth settings
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '991165727278-fhsderof6094lk5tirfqobvk74fhkldk.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+LOGIN_REDIRECT_URL = 'index'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'

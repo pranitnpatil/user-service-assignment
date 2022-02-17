@@ -1,4 +1,3 @@
-from ipaddress import ip_address
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from user_service import messages
@@ -8,15 +7,12 @@ from users.models import *
 from django.contrib.auth.models import User
 from user_service.common_functions import *
 from django.utils import timezone
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
 
-
+# METHOD NAME:index 
+# DESCRIPTION: This function renders the homepage
 def index(request):
-    r = requests.get('https://httpbin.org/status/418')
-    print(r.text)
-    return HttpResponse('<pre>' + r.text + '</pre>')
+    return render(request, "index.html")
 
 # METHOD NAME:create_user 
 # DESCRIPTION: This function is for user creation/registration
