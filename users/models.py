@@ -4,7 +4,8 @@ import csv
 from django.http import HttpResponse
 from io import StringIO 
 
-
+# MODEL NAME:UserDetails 
+# DESCRIPTION: This model is used to store user details
 class UserDetails(models.Model):
     username = models.CharField(max_length = 256)
     password = models.CharField(max_length = 256)
@@ -16,6 +17,9 @@ class UserDetails(models.Model):
             models.Index(fields=['username']), 
         ]
 
+
+# MODEL NAME:UserLoginHistory 
+# DESCRIPTION: This model is used to store user login history
 class UserLoginHistory(models.Model):
     username = models.CharField(max_length = 256)
     ip_address = models.CharField(max_length = 256)
@@ -24,10 +28,13 @@ class UserLoginHistory(models.Model):
     class Meta:
         db_table = 'user_login_history'
 
+# METHOD NAME:UserLoginHistoryAdmin 
+# DESCRIPTION: This is to add custom action for exporting csv
 class UserLoginHistoryAdmin(admin.ModelAdmin):
     actions = ['download_csv']
     list_display = ('username', 'ip_address', 'created_at')
     @admin.action(description='Export Login history as csv')
+    #csv export function
     def download_csv(self, request, queryset):
         f = StringIO()
         writer = csv.writer(f)

@@ -1,3 +1,5 @@
+#reusable messages
+
 #status codes
 FAIL = 1
 SUCCESS = 0

@@ -1,3 +1,5 @@
+#reusable congifurations
+
 CONTENT_TYPE = "application/json"
 HEADER = {'content-type': CONTENT_TYPE}
 #webhook config

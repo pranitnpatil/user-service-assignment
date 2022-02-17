@@ -25,6 +25,7 @@ def create_user(request):
     try:
         req = json.loads(request.body)
         if all (key in req and req[key] for key in ["username", "password"]):
+            #check if user already exists
             user_details = UserDetails.objects.filter(username = req["username"],is_deleted = False)
             if user_details.exists():
                 return_object = {
@@ -32,6 +33,7 @@ def create_user(request):
                     "message": messages.USER_NAME_EXIST,
                 }
             else:
+                #save user details to db
                 UserDetails.objects.create(username = req["username"],password = req["password"])
                 #also storing user details in auth.models for authentication
                 User.objects.create_user(req["username"],'',req["password"])
@@ -40,11 +42,13 @@ def create_user(request):
                     "message": messages.USER_CREATION_SUCCESS,
                 }
         else:
+            #invalid request
             return_object = {
                 "status": messages.FAIL,
                 "message": messages.INVALID_REQUEST_OBJECT,
             }
     except (Exception) as error:
+        #exception handling
         print("error in create_user", error)
         return_object = {
             "status": messages.FAIL,
@@ -60,7 +64,9 @@ def user_login(request):
     try:
         req = json.loads(request.body)
         if all (key in req and req[key] for key in ["username", "password"]):
+            #get ip address by request
             ip_address = get_user_ip_address(request)
+            #check if user exist
             user_details = UserDetails.objects.filter(username = req["username"],is_deleted = False)
             if user_details.exists():
                 UserLoginHistory.objects.create(username = req["username"],ip_address = ip_address,
@@ -70,16 +76,19 @@ def user_login(request):
                     "message": messages.LOGIN_SUCCESS,
                     }
             else:
+                #user not present in db
                 return_object = {
                     "status": messages.FAIL,
                     "message": messages.LOGIN_FAILED,
                 }
         else:
+            #invalid request
             return_object = {
                 "status": messages.FAIL,
                 "message": messages.INVALID_REQUEST_OBJECT,
             }
     except (Exception) as error:
+        #exception handling
         print("error in authenticate_user", error)
         return_object = {
             "status": messages.FAIL,
@@ -93,16 +102,20 @@ def user_login(request):
 def authenticate_user(request):
     try:
         req = json.loads(request.body)
+        #declaring failed return object for reusing
         failed_return_object = {
             "status": messages.FAIL,
             "message": messages.USER_AUTHENTICATION_FAIL,
         }
         if all (key in req and req[key] for key in ["username", "password"]):
+            #get ip address by request
             ip_address = get_user_ip_address(request)
+            #trigger webhook to notify team
             trigger_webhook(req["username"],ip_address)
+            #check if user exists
             user_details = User.objects.filter(username = req["username"])
             if user_details.exists():
-                token = get_token(user_details[0])
+                token = get_jwt_token(user_details[0])
                 if token:
                     return_object = {
                     "status": messages.SUCCESS,
@@ -110,27 +123,23 @@ def authenticate_user(request):
                     "token":token
                     }
                 else:
+                    #get token failed
                     return_object = failed_return_object
             else:
+                #user not present in db
                 return_object = failed_return_object
         else:
+            #invalid request
             return_object = {
                 "status": messages.FAIL,
                 "message": messages.INVALID_REQUEST_OBJECT,
             }
     except (Exception) as error:
+        #exception handling
         print("error in authenticate_user", error)
         return_object = failed_return_object
     return JsonResponse(return_object, safe=False)
 
 
-
-
-# class HelloView(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request):
-#         content = {'message': 'Hello, World!'}
-#         return Response(content)
 
 
