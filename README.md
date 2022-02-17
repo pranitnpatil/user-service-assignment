@@ -1,19 +1,19 @@
 #custom django app with some custom APIs
 
 #steps for local setup and run
-1. install required packages
+1. install required packages:
 
     pip install -r requirements.txt
     
-2. makemigration just in case 
+2. makemigration just in case:
 
     python manage.py makemigrations 
     
-3. migrate models
+3. migrate models:
 
     python manage.py migrate
 
-4. Run the django project
+4. Run the django project:
 
     python manage.py runserver
 
