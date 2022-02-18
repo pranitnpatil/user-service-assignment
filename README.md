@@ -41,4 +41,15 @@ link - https://desolate-hamlet-81823.herokuapp.com/
 admin credentials = username -admin
                     password -admin
 
+API DETAILS:
+
+URL: https://desolate-hamlet-81823.herokuapp.com/api/user-service/create-user
+     https://desolate-hamlet-81823.herokuapp.com/api/user-service/user-login
+     https://desolate-hamlet-81823.herokuapp.com/api/user-service/authenticate-user
+Method: POST
+Content-Type: application/json
+Body: {
+    "username":"abc",
+    "password":"xxxx"
+}
 
